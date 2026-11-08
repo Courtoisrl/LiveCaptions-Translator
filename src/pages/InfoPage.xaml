@@ -23,15 +23,15 @@
                 </Hyperlink>
             </TextBlock>
             <TextBlock Margin="0,0,0,3">
-                <Run FontWeight="SemiBold" Text="版本：" />
-                <Hyperlink NavigateUri="https://github.com/Courtoisrl/LiveCaptions-Translator/releases" RequestNavigate="Hyperlink_RequestNavigate">
-                    <Run x:Name="Version" Text="1.7.2" />
-                </Hyperlink>
-            </TextBlock>
-            <TextBlock Margin="0,0,0,3">
                 <Run FontWeight="SemiBold" Text="维护者：" />
                 <Hyperlink NavigateUri="https://github.com/Courtoisrl" RequestNavigate="Hyperlink_RequestNavigate">
                     <Run Text="https://github.com/Courtoisrl" />
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock Margin="0,0,0,3">
+                <Run FontWeight="SemiBold" Text="版本：" />
+                <Hyperlink NavigateUri="https://github.com/Courtoisrl/LiveCaptions-Translator/releases" RequestNavigate="Hyperlink_RequestNavigate">
+                    <Run x:Name="Version" Text="1.7.2" />
                 </Hyperlink>
             </TextBlock>
             <Separator Margin="0,5,0,5" />
