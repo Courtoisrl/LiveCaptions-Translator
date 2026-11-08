@@ -6,7 +6,6 @@
 
 ### 用 Windows 实时字幕 + 翻译 API，做实时语音翻译
 
-[![Master Build](https://github.com/Courtoisrl/LiveCaptions-Translator/actions/workflows/dotnet-build.yml/badge.svg?branch=master)](https://github.com/Courtoisrl/LiveCaptions-Translator/actions/workflows/dotnet-build.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/Courtoisrl/LiveCaptions-Translator?label=Latest&color=yellow)](https://github.com/Courtoisrl/LiveCaptions-Translator/releases/latest)
 [![Windows 11](https://img.shields.io/badge/platform-Windows11-blue?logo=windows11&color=1E9BFA)](https://www.microsoft.com/windows/windows-11)
 [![.NET 8](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/download/dotnet/8.0)
