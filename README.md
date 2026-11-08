@@ -1,213 +1,193 @@
-﻿<div align="center">
+<div align="center">
 
-<img src="src/LiveCaptions-Translator.ico" width="128" height="128" alt="LiveCaptions-Translator Icon"/>
+<img src="src/LiveCaptions-Translator.ico" width="128" height="128" alt="LiveCaptions Translator Icon"/>
 
 # LiveCaptions Translator
 
-<a href="https://trendshift.io/repositories/14278" target="_blank"><img src="https://trendshift.io/api/badge/repositories/14278" alt="SakiRinn%2FLiveCaptions-Translator | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+### 用 Windows 实时字幕 + 翻译 API，做实时语音翻译
 
-### *Real-time audio/speech translation tool based on Windows LiveCaptions*
-
-[![Master Build](https://github.com/SakiRinn/LiveCaptions-Translator/actions/workflows/dotnet-build.yml/badge.svg?branch=master)](https://github.com/SakiRinn/LiveCaptions-Translator/actions/workflows/dotnet-build.yml)
-[![GitHub Release](https://img.shields.io/github/v/release/SakiRinn/LiveCaptions-Translator?label=Latest&color=yellow)](https://github.com/SakiRinn/LiveCaptions-Translator/releases/latest)
-[![Windows 11](https://img.shields.io/badge/platform-Windows11-blue?logo=windows11&style=&color=1E9BFA)](https://www.microsoft.com/en-us/software-download/windows11)
-[![GitHub License](https://img.shields.io/github/license/SakiRinn/LiveCaptions-Translator)](https://github.com/SakiRinn/LiveCaptions-Translator/blob/master/LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/SakiRinn/LiveCaptions-Translator)](https://github.com/SakiRinn/LiveCaptions-Translator/stargazers)
-
-**English** | [中文](README_zh-CN.md)
+[![Master Build](https://github.com/Courtoisrl/LiveCaptions-Translator/actions/workflows/dotnet-build.yml/badge.svg?branch=master)](https://github.com/Courtoisrl/LiveCaptions-Translator/actions/workflows/dotnet-build.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/Courtoisrl/LiveCaptions-Translator?label=Latest&color=yellow)](https://github.com/Courtoisrl/LiveCaptions-Translator/releases/latest)
+[![Windows 11](https://img.shields.io/badge/platform-Windows11-blue?logo=windows11&color=1E9BFA)](https://www.microsoft.com/windows/windows-11)
+[![.NET 8](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/download/dotnet/8.0)
+[![License](https://img.shields.io/github/license/Courtoisrl/LiveCaptions-Translator)](LICENSE)
 
 </div>
 
-## Overview
+## 这是什么
 
-**✨ LiveCaptions Translator = Windows LiveCaptions + Translate API ✨**
+Windows 自带的实时字幕（LiveCaptions）识别准确、占用低，但它只转写、不翻译。本项目把 LiveCaptions 的识别结果接上翻译 API，在看直播、视频、开会时给出实时的原文 + 译文，并且不需要 Copilot+ PC。
 
-This is a lightweight tool that seamlessly integrates translation APIs with Windows Live Captions, enabling real-time speech translation without requiring a Copilot+ PC.
+本仓库是 [SakiRinn/LiveCaptions-Translator](https://github.com/SakiRinn/LiveCaptions-Translator) 的二次开发版本，在上游功能全部保留的前提下，加入了几处偏日常使用的改动。
 
-Windows' built-in LiveCaptions is easy to use, uses few resources, and has extremely high recognition accuracy. If empowering it with the awesome translation capabilities of LLMs, you will get... possibly the best real-time translator available to date!
+## 与上游的差异
 
-**🚀 Quick Start:** Download from [Releases](https://github.com/SakiRinn/LiveCaptions-Translator/releases) and start with a single click!
+| 改动 | 行为 |
+| --- | --- |
+| **最小化到托盘** | 点最小化按钮后主窗口收进通知区，不再占任务栏；托盘图标就是程序图标 |
+| **启动即暂停翻译** | 每次打开软件都处于暂停（Log Only）状态，需要时再点一下恢复 |
+| **Start Minimized 开关** | 设置页新增开关，开启后每次启动直接最小化到托盘 |
+| **悬浮字幕默认只显示原文** | 打开悬浮窗时只显示原文卡片，需要译文再按模式按钮切换 |
+| **悬浮字幕开关记忆** | 上次关掉了悬浮窗，这次启动就不会自动弹出来；上次开着，这次启动会自动打开 |
 
 <div align="center">
-  <img src="images/preview.png" alt="Preview of LiveCaptions Translator" width="90%" />
+  <img src="images/preview.png" alt="LiveCaptions Translator 主界面" width="90%" />
   <br>
-  <em style="font-size:80%">Preview of LiveCaptions Translator</em>
-  <br>
+  <em style="font-size:80%">主界面</em>
 </div>
 
-## Features
+## 功能
 
-- **🔄 Seamless Integration**
+- **🔄 与 Windows 实时字幕无缝配合**
 
-  Automatically invokes Windows LiveCaptions without opening separate windows. Provides a unified experience for real-time audio/speech translation.
+  程序会自动拉起 Windows LiveCaptions，并在首次使用后把它隐藏起来，你只需要面对一个窗口。
 
-  After your first use, Windows LiveCaptions will be hidden by default. You can show it again in the settings.
+  在 Windows LiveCaptions 里勾选 ***Include microphone audio*** 即可识别麦克风；识别源语言在 LiveCaptions 里改。
+
+- **🎨 现代界面**
+
+  Fluent UI 风格，跟随系统自动切换浅色 / 深色主题。
+
+- **🌐 多种翻译服务**
+
+  | API | 类型 | 部署 |
+  | --- | --- | --- |
+  | Google / Google2 | 传统 | 在线，免配置 |
+  | DeepL | 传统 | 在线 |
+  | 有道 | 传统 | 在线 |
+  | 百度翻译 | 传统 | 在线 |
+  | [MTranServer](https://github.com/xxnuo/MTranServer) | 传统 | 自建 |
+  | [LibreTranslate](https://libretranslate.com/) | 传统 | 自建 |
+  | [Ollama](https://ollama.com) | 大模型 | 本地 |
+  | LM Studio | 大模型 | 本地 |
+  | OpenAI 兼容接口 | 大模型 | 在线 |
+  | [OpenRouter](https://openrouter.ai) | 大模型 | 在线 |
+
+  大模型类接口更擅长处理不完整句子和上下文，长句、口语场景推荐优先选它们。
+
+- **🪟 悬浮字幕窗口**
+
+  无边框、半透明的置顶窗口，可以把字幕叠在游戏或视频上；开启“点击穿透”后完全不挡操作。
 
   <div align="center">
-    <img src="images/show_livecaptions.png" alt="LiveCaptions Show/Hide button" width="90%" />
+    <img src="images/overlay_window.png" alt="悬浮字幕窗口" width="80%" />
     <br>
-    <em style="font-size:80%">LiveCaptions Show/Hide button</em>
-    <br>
+    <em style="font-size:80%">悬浮字幕窗口</em>
   </div>
 
-  By enabling the ***Include microphone audio*** option in the setting of Windows LiveCaptions, you can achieve real-time speech translation!
-  > ⚠️ **IMPORTANT:** You must change the source language in Windows LiveCaptions!
+  窗口上的控制栏可以调字体大小、描边、加粗、文字颜色、背景透明度与颜色，切换“原文 / 双语 / 仅译文”三种显示模式，切换原文与译文的上下顺序，也可以拖动窗口左右边缘调整宽度。窗口位置会被记住。
 
-- **🎨 Modern Interface**
+- **⚙️ 常用控制**
 
-  Easy-to-use and clean Fluent UI aligned with modern Windows aesthetics.
+  标题栏提供置顶、暂停翻译、日志卡片、悬浮窗四个按钮；字幕区域点击即可复制，历史记录可导出 CSV。
 
-  It can automatically switches between light and dark themes 🌓 based on the system setting.
+- **📒 历史记录**
 
-- **🌐 Multiple Translation Services**
-
-  Supports various translation engines, including 2 out-of-the-box Google Translate.
-
-  Implemented translation engines are shown in the table below:
+  原文与译文按时间保存，支持搜索、分页（20 / 30 / 50 / 100 条每页）、导出 CSV 和清空。
 
   <div align="center">
-
-  | API                                                 | Type        | Hosting     |
-  |-----------------------------------------------------|-------------|-------------|
-  | [Ollama](https://ollama.com)                        | LLM-based   | Self-hosted |
-  | OpenAI Compatible API                               | LLM-based   | Online      |
-  | [OpenRouter](https://openrouter.ai)                 | LLM-based   | Online      |
-  | Google Translate                                    | Traditional | Online      |
-  | DeepL                                               | Traditional | Online      |
-  | Youdao                                              | Traditional | Online      |
-  | Baidu Translate                                     | Traditional | Online      |
-  | [MTranServer](https://github.com/xxnuo/MTranServer) | Traditional | Self-hosted |
-  | [LibreTranslate](https://libretranslate.com/)       | Traditional | Self-hosted |
-
+    <img src="images/history.png" alt="历史记录" width="90%" />
+    <br>
+    <em style="font-size:80%">历史记录</em>
   </div>
 
-  It's strongly recommended using **LLM-based** translation engines, as LLMs excel at handling incomplete sentences and are adept at understanding context.
+- **🎞️ 日志卡片**
 
-- **🪟 Overlay Window**
-
-  Open a borderless, transparent overlay window to display subtitles, providing the most immersive experience. This is very useful for scenarios like gaming, videos, and live streams!
-
-  You can even make it completely embedded into the screen, becoming part of it. This means it won't affect any of your operations at all! This is perfect for gamers.
+  在主界面展开最近几句的转写记录，方便对照上下文；显示数量由设置里的 *Display Sentences* 决定。
 
   <div align="center">
-    <img src="images/overlay_window.png" alt="Overlay Window" width="80%" />
+    <img src="images/log_cards.png" alt="日志卡片" width="90%" />
     <br>
-    <em style="font-size:80%">Overlay window</em>
-    <br>
+    <em style="font-size:80%">日志卡片</em>
   </div>
 
-  You can open the Overlay Window on the taskbar and adjust its parameters such as the window background and subtitle color, font size, and transparency. Extremely high configurability allows it to completely match your preferences!
+## 托盘与启动行为
 
-  You can adjust the number of sentences displayed simultaneously in the *Overlay Sentences* section of the setting page.
+- **最小化到托盘**：点主窗口的最小化按钮，窗口隐藏、托盘出现程序图标，任务栏不再占位。左键单击托盘图标或右键菜单 **Show** 可以恢复窗口，**Exit** 退出程序。
+- **后台继续工作**：最小化到托盘只是隐藏窗口，翻译和悬浮字幕都在照常运行。
+- **Start Minimized**：设置页 *Context Aware* 下方的开关。打开后每次启动都直接收进托盘，适合开机自启、只在悬浮窗里看字幕的用法。
+- **启动即暂停**：每次启动默认是暂停翻译的状态，主窗口译文区显示 `[Paused]`，历史记录只写原文。点标题栏的暂停按钮即可恢复，这个状态只在本次运行内有效。如果希望启动就翻译，可以把 `src/Translator.cs` 里的 `LogOnlyFlag` 默认值改回 `false` 后重新编译。
 
-- **⚙️ Flexible Controls**
+## 悬浮字幕的模式与记忆
 
-  Supports Always-on-top window and convenient translation pause/resume, and you can copy text with a single click for quick share or saving.
+打开悬浮窗时默认只显示原文（`SubtitleOnly`）。点控制栏的模式按钮按下面的顺序循环：
 
-- **📒 History Management**
+`仅原文` → `原文 + 译文` → `仅译文` → `仅原文` …
 
-  Records original and translated text, perfect for meetings, lectures, and important discussions.
+悬浮窗的开 / 关状态保存在 `setting.json` 的 `OverlayWindowEnabled` 字段里，下次启动会自动恢复；窗口位置也会一并恢复。窗口高度由内容决定，所以切换模式或修改 *Display Sentences* 时高度会自动变化，不会出现位置漂移。
 
-  You can export all records as a CSV file.
+## 下载和运行
 
-  <div align="center">
-    <img src="images/history.png" alt="Translation history" width="90%" />
-    <br>
-    <em style="font-size:80%">Translation history</em>
-    <br>
-  </div>
+已验证环境为 **Windows 11 x64**。
 
-- **🎞️ Log Cards**
+1. 从 [Releases](https://github.com/Courtoisrl/LiveCaptions-Translator/releases/latest) 下载发布包。
+2. 建议放在可写目录（例如 `D:\Software\LiveCaptions-Translator`），程序会在所在目录生成配置和历史记录。
+3. 双击 `LiveCaptionsTranslator.exe` 启动。
 
-  Recent transcription records can be displayed as Log Cards, which helps you better grasp the context.
+发布包分两种：带运行时（体积大，无需装 .NET）和不带运行时（体积小，需要本机有 .NET 8 桌面运行时）。
 
-  You can enable it on the taskbar of the main page and change the number of cards in the *Log Cards* section of the setting page.
+### 第一次使用前的准备
 
-  <div align="center">
-    <img src="images/log_cards.png" alt="Log cards" width="90%" />
-    <br>
-    <em style="font-size:80%">Log Cards</em>
-    <br>
-  </div>
+Windows LiveCaptions 需要先能正常工作：
 
+1. 打开 Windows 实时字幕（`Win + Ctrl + L`），按提示下载语音识别文件和语言包。
+2. 点 LiveCaptions 里的 **⚙️ 齿轮** → **Position** → **Overlaid on screen**。这一步不做的话，隐藏 LiveCaptions 后屏幕上会残留显示问题。
+3. 在本程序设置页点 **Hide** 按钮隐藏 LiveCaptions，之后就用本程序看字幕。
+4. 需要换识别源语言时，在设置页点 **Show** 把 LiveCaptions 调出来，在里面修改。
 
-## Prerequisites
+> Windows 11 24H2 之后，源语言只能在 LiveCaptions 里改。
 
-<div align="center">
+## 配置翻译服务
 
-| Requirement                                                                                                           | Details                                     |
-|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------|
-| <img src="https://img.shields.io/badge/Windows-11%20(22H2+)-0078D6?style=for-the-badge&logo=windows&logoColor=white"> | With LiveCaptions support.                  |
-| <img src="https://img.shields.io/badge/.NET-8.0+-512BD4?style=for-the-badge&logo=dotnet&logoColor=white">             | Recommended. Not test in previous versions. |
+在 **设置 → Translate API** 里选择服务，再填对应参数。Google 和 Google2 不需要配置，其他服务需要先填好 key 或地址才能使用。
 
-</div>
+以 DeepSeek（OpenAI 兼容接口）为例：
 
-This tool is based on Windows LiveCaptions, which is available since **Windows 11 22H2**.
+| 字段 | 示例 |
+| --- | --- |
+| API URL | `https://api.deepseek.com/chat/completions` |
+| 模型 | `deepseek-chat`（以服务商文档为准） |
+| API Key | 你自己的 key，只保存在本地 `setting.json` |
+| 目标语言 | `zh-CN` |
 
-We suggest you have **.NET runtime 8.0** or higher installed. If you are not available to install one, you can download the ***with runtime*** version but its size is bigger.
+- 目标语言使用 BCP 47 标签（如 `zh-CN`、`ja-JP`），下拉框允许直接输入自定义值。
+- *API Interval* 控制调用频率：字幕每变化 N 次才调用一次翻译接口，数值越小越实时、消耗也越大。
+- *Context Aware* 打开后会附带最近 N 句（由 *Contexts* 决定）作为上下文，长句和指代更准，但消耗更多 token。
+- *Display Sentences* 同时决定日志卡片数量和悬浮窗最多显示几句；*Contexts* 不能小于它，否则程序会自动调整。
 
-<div align="center">
-  <p align="center">
-    <a href="https://github.com/SakiRinn/LiveCaptions-Translator/wiki">
-      <img src="https://img.shields.io/badge/📚_Check_our_Wiki_for_detailed_information-2ea44f?style=for-the-badge" alt="Check our Wiki">
-    </a>
-  </p>
-</div>
+## 数据保存
 
-## Getting Started
+程序目录下会生成：
 
-> ⚠️ **IMPORTANT:** You must complete the following steps before running LiveCaptions Translator for the first time.
->
-> For detailed information, see Microsoft's guide on [Using live captions](https://support.microsoft.com/en-us/windows/use-live-captions-to-better-understand-audio-b52da59c-14b8-4031-aeeb-f6a47e6055df).
+- `setting.json`：所有设置、API Key，以及 `StartMinimized`、`OverlayWindowEnabled` 这类开关状态。**里面含有 key，不要随意分享。**
+- `translation_history.db`：SQLite 历史记录，包含原文和译文。
 
-### Step 1: Verify Windows LiveCaptions Availability
+暂停翻译（Log Only）期间，历史记录里的译文和 API 字段会写成 `N/A` / `LogOnly`，原文照常保存。
 
-Confirm LiveCaptions is available on your system using any of these methods:
+## 从源码构建
 
-- Toggle **Live captions** in the quick settings
-- Press **Win + Ctrl + L**
-- Access via **Quick settings** > **Accessibility** > **Live captions**
-- Open **Start** > **All apps** > **Accessibility** > **Live captions**
-- Navigate to **Settings** > **Accessibility** > **Captions** and enable **Live captions**
+需要 Windows 和 .NET 8 SDK，在仓库根目录执行：
 
-### Step 2: Configure LiveCaptions
+```powershell
+# 编译
+dotnet build LiveCaptionsTranslator.csproj -c Debug
 
-When you first start, Windows LiveCaptions will ask for your consent to process voice data on your device and prompt you to download language files to be used by on-device speech recognition.
+# 发布单文件（自包含，目标机器无需安装运行时）
+dotnet publish LiveCaptionsTranslator.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o artifacts/publish
+```
 
-After launching Windows LiveCaptions, click the **⚙️ gear** icon to open the setting menu, then select **Position** > **Overlaid on screen**.
+如果要发布体积更小的框架依赖版本，把 `--self-contained` 改成 `false`，目标机器需要有 .NET 8 桌面运行时。
 
-> ⚠️ **VERY IMPORTANT!** Otherwise, a display bug will occur on the screen after hiding Windows LiveCaptions.
+## 已知限制
 
-<div align="center">
-  <img src="images/speech_recognition.png" alt="Items under speech recognition" width="80%" />
-  <br>
-  <em style="font-size:80%">Required speech recognition downloads</em>
-  <br>
-</div>
+- 依赖 Windows LiveCaptions，因此只支持 Windows 11 22H2 及以上。
+- 翻译质量取决于所选引擎；暂停状态下不会产生译文，属于预期行为。
+- 悬浮窗默认宽度 650（可拖动左右边缘临时调整），高度随内容自动变化（切换模式或修改显示句数时高度会变）。
+- 网络延迟、接口限流都会影响字幕的实时性；翻译接口报错时，译文区会显示错误提示，原文不受影响。
+- 最小化到托盘后程序仍在后台运行，需要完全退出请用托盘的 **Exit**。
 
-After configuration, close Windows LiveCaptions and launch LiveCaptions Translator to start using it! 🎉
+## 致谢与许可证
 
-## Project Stats
+原始项目由 [SakiRinn](https://github.com/SakiRinn) 及贡献者开发，本仓库是在其基础上维护的版本，遵循 [Apache-2.0](LICENSE) 许可证并保留原作者版权。
 
-### Activity
-
-<div align="center">
-  <img src="https://img.shields.io/github/issues/SakiRinn/LiveCaptions-Translator?style=for-the-badge&label=Issues&color=yellow" alt="GitHub Issues">
-  <img src="https://img.shields.io/github/issues-pr/SakiRinn/LiveCaptions-Translator?style=for-the-badge&label=Pull%20Requests&color=blue" alt="GitHub Pull Requests">
-  <img src="https://img.shields.io/github/discussions/SakiRinn/LiveCaptions-Translator?style=for-the-badge&label=Discussions&color=orange" alt="GitHub Discussions">
-  <img src="https://img.shields.io/github/last-commit/SakiRinn/LiveCaptions-Translator?style=for-the-badge&label=Last%20Commit&color=purple" alt="GitHub Last Commit">
-</div>
-
-### Contributors
-
-<div align="center">
-  <img src="https://img.shields.io/github/contributors/SakiRinn/LiveCaptions-Translator?style=for-the-badge&label=Contributors&color=success" alt="GitHub Contributors">
-  <br>
-  <a href="https://github.com/SakiRinn/LiveCaptions-Translator/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=SakiRinn/LiveCaptions-Translator" />
-  </a>
-</div>
-
-### Star History
-
-[![Stargazers over time](https://starchart.cc/SakiRinn/LiveCaptions-Translator.svg?variant=adaptive)](https://starchart.cc/SakiRinn/LiveCaptions-Translator)
+界面使用 [WPF-UI](https://github.com/lepoco/wpfui)，托盘图标来自项目自带的 `src/LiveCaptions-Translator.ico`。
