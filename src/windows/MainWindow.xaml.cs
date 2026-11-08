@@ -325,9 +325,9 @@ namespace LiveCaptionsTranslator
                 return;
             }
 
-            var currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString();
+            var currentVersion = UpdateUtil.NormalizeVersion(Assembly.GetExecutingAssembly().GetName().Version?.ToString());
             var ignoredVersion = Translator.Setting.IgnoredUpdateVersion;
-            if (!string.IsNullOrEmpty(ignoredVersion) && ignoredVersion == latestVersion)
+            if (!string.IsNullOrEmpty(ignoredVersion) && UpdateUtil.NormalizeVersion(ignoredVersion) == latestVersion)
                 return;
             if (!string.IsNullOrEmpty(latestVersion) && latestVersion != currentVersion)
             {
