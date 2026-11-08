@@ -17,7 +17,7 @@
 
 Windows 自带的实时字幕（LiveCaptions）识别准确、占用低，但它只转写、不翻译。本项目把 LiveCaptions 的识别结果接上翻译 API，在看直播、视频、开会时给出实时的原文 + 译文，并且不需要 Copilot+ PC。
 
-本仓库是 [SakiRinn/LiveCaptions-Translator](https://github.com/SakiRinn/LiveCaptions-Translator) 的二次开发版本，在上游功能全部保留的前提下，加入了几处偏日常使用的改动。
+本仓库是 [SakiRinn/LiveCaptions-Translator](https://github.com/SakiRinn/LiveCaptions-Translator) 的二次开发版本，在上游功能全部保留的前提下，用DeepSeek修改添加，加入了几处偏日常使用的改动。
 
 ## 与上游的差异
 
@@ -127,7 +127,10 @@ Windows 自带的实时字幕（LiveCaptions）识别准确、占用低，但它
 2. 建议放在可写目录（例如 `D:\Software\LiveCaptions-Translator`），程序会在所在目录生成配置和历史记录。
 3. 双击 `LiveCaptionsTranslator.exe` 启动。
 
-发布包分两种：带运行时（体积大，无需装 .NET）和不带运行时（体积小，需要本机有 .NET 8 桌面运行时）。
+发布包分两种：
+
+- `LiveCaptionsTranslator-win-x64-withruntime.exe`：自包含，约 72 MB，目标机器无需安装 .NET；
+- `LiveCaptionsTranslator-win-x64.exe`：框架依赖，体积小，目标机器需要 .NET 8 桌面运行时。
 
 ### 第一次使用前的准备
 
@@ -175,11 +178,13 @@ Windows LiveCaptions 需要先能正常工作：
 # 编译
 dotnet build LiveCaptionsTranslator.csproj -c Debug
 
-# 发布单文件（自包含，目标机器无需安装运行时）
-dotnet publish LiveCaptionsTranslator.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o artifacts/publish
+# 发布单文件（自包含 + 压缩，目标机器无需安装运行时，约 72 MB）
+dotnet publish LiveCaptionsTranslator.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -o artifacts/publish
 ```
 
 如果要发布体积更小的框架依赖版本，把 `--self-contained` 改成 `false`，目标机器需要有 .NET 8 桌面运行时。
+
+发布包里包含 `LiveCaptionsTranslator.exe` 和调试符号 `LiveCaptionsTranslator.pdb`，分发前把 `.pdb` 删掉即可。
 
 ## 已知限制
 

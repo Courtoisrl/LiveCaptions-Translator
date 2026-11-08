@@ -1,4 +1,4 @@
-﻿<Page
+<Page
     x:Class="LiveCaptionsTranslator.InfoPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -11,13 +11,37 @@
     mc:Ignorable="d">
     <Grid Margin="10">
         <StackPanel>
+            <Separator Margin="0,0,0,5" />
+            <TextBlock TextAlignment="Left" TextWrapping="Wrap">
+                <Run Text="本软件是基于上游修改，十分感谢上游作者的制作的软件，对于本人的听障作出很大的帮助，如今修改是因为十分需要个别功能，故Fork修改。" />
+                <Run Text="&#x0A;本软件的任何BUG问题不要找上游作者反馈，只需在此软件本仓库反馈。" />
+            </TextBlock>
+            <TextBlock Margin="0,5,0,3">
+                <Run FontWeight="SemiBold" Text="仓库链接：" />
+                <Hyperlink NavigateUri="https://github.com/Courtoisrl/LiveCaptions-Translator" RequestNavigate="Hyperlink_RequestNavigate">
+                    <Run Text="https://github.com/Courtoisrl/LiveCaptions-Translator" />
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock Margin="0,0,0,3">
+                <Run FontWeight="SemiBold" Text="版本：" />
+                <Hyperlink NavigateUri="https://github.com/Courtoisrl/LiveCaptions-Translator/releases" RequestNavigate="Hyperlink_RequestNavigate">
+                    <Run Text="https://github.com/Courtoisrl/LiveCaptions-Translator/releases" />
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock Margin="0,0,0,3">
+                <Run FontWeight="SemiBold" Text="维护者：" />
+                <Hyperlink NavigateUri="https://github.com/Courtoisrl" RequestNavigate="Hyperlink_RequestNavigate">
+                    <Run Text="https://github.com/Courtoisrl" />
+                </Hyperlink>
+            </TextBlock>
+            <Separator Margin="0,5,0,5" />
             <TextBlock TextAlignment="Left" TextWrapping="Wrap">
                 <Run Text="欢迎任何形式的贡献！你可以通过 GitHub Issues 提出建议或反馈问题，也可以直接提交 Pull Request 贡献代码。" />
                 <Run Text="&#x0A;如果这个程序对你有帮助，欢迎给我们点个 Star ✨！" />
             </TextBlock>
             <Separator Margin="0,5,0,5" />
             <TextBlock Margin="0,0,0,3">
-                <Run FontWeight="SemiBold" Text="仓库：" />
+                <Run FontWeight="SemiBold" Text="上游仓库：" />
                 <Hyperlink NavigateUri="https://github.com/SakiRinn/LiveCaptions-Translator" RequestNavigate="Hyperlink_RequestNavigate">
                     <Run Text="https://github.com/SakiRinn/LiveCaptions-Translator" />
                 </Hyperlink>
@@ -29,7 +53,7 @@
                 </Hyperlink>
             </TextBlock>
             <TextBlock Margin="0,0,0,3">
-                <Run FontWeight="SemiBold" Text="维护者：" />
+                <Run FontWeight="SemiBold" Text="上游维护者：" />
                 <Hyperlink NavigateUri="https://github.com/SakiRinn" RequestNavigate="Hyperlink_RequestNavigate">
                     <Run Text="@SakiRinn" />
                 </Hyperlink>
@@ -39,10 +63,8 @@
                 </Hyperlink>
             </TextBlock>
             <TextBlock>
-                <Run FontWeight="SemiBold" Text="版本：" />
-                <Hyperlink NavigateUri="https://github.com/SakiRinn/LiveCaptions-Translator/releases" RequestNavigate="Hyperlink_RequestNavigate">
-                    <Run x:Name="Version" Text="1.1.1.1" />
-                </Hyperlink>
+                <Run FontWeight="SemiBold" Text="当前版本：" />
+                <Run x:Name="Version" Text="1.1.1.1" />
             </TextBlock>
         </StackPanel>
     </Grid>

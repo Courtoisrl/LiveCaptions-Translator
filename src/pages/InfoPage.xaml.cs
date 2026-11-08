@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -8,7 +8,7 @@ namespace LiveCaptionsTranslator
 {
     public partial class InfoPage : Page
     {
-        public const int MIN_HEIGHT = 210;
+        public const int MIN_HEIGHT = 340;
 
         public InfoPage()
         {
