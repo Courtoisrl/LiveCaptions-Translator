@@ -34,17 +34,14 @@
                     <Run x:Name="Version" Text="1.7.2" />
                 </Hyperlink>
             </TextBlock>
-            <Separator Margin="0,5,0,5" />
+            <TextBlock Margin="0,5,0,3">
+                <Run FontWeight="SemiBold" Text="上游原内容：" />
+            </TextBlock>
             <TextBlock TextAlignment="Left" TextWrapping="Wrap">
-                <Run Text="欢迎任何形式的贡献！你可以通过 GitHub Issues 提出建议或反馈问题，也可以直接提交 Pull Request 贡献代码。" />
-                <Run Text="&#x0A;如果这个程序对你有帮助，欢迎给我们点个 Star ✨！" />
+                <Run Text="欢迎任何形式的贡献！你可以通过 GitHub Issues 提出建议或反馈问题，也可以直接提交 Pull Request 贡献代码。如果这个程序对你有帮助，欢迎给我们点个 Star ✨！" />
             </TextBlock>
-            <Separator Margin="0,5,0,5" />
-            <TextBlock Margin="0,0,0,3">
-                <Run FontWeight="SemiBold" Text="原文内容：" />
-            </TextBlock>
-            <TextBlock Margin="0,0,0,3">
-                <Run FontWeight="SemiBold" Text="上游仓库：" />
+            <TextBlock Margin="0,5,0,3">
+                <Run FontWeight="SemiBold" Text="仓库：" />
                 <Hyperlink NavigateUri="https://github.com/SakiRinn/LiveCaptions-Translator" RequestNavigate="Hyperlink_RequestNavigate">
                     <Run Text="https://github.com/SakiRinn/LiveCaptions-Translator" />
                 </Hyperlink>
@@ -56,7 +53,7 @@
                 </Hyperlink>
             </TextBlock>
             <TextBlock Margin="0,0,0,3">
-                <Run FontWeight="SemiBold" Text="上游维护者：" />
+                <Run FontWeight="SemiBold" Text="维护者：" />
                 <Hyperlink NavigateUri="https://github.com/SakiRinn" RequestNavigate="Hyperlink_RequestNavigate">
                     <Run Text="@SakiRinn" />
                 </Hyperlink>
