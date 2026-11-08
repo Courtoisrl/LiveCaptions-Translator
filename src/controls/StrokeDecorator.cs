@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -186,6 +186,7 @@ namespace LiveCaptionsTranslator
                 return;
             foreach (var run in textBlock.Inlines.OfType<Run>())
             {
+                RegisterPropertyListener(run, Run.TextProperty);
                 RegisterPropertyListener(run, Run.ForegroundProperty);
                 RegisterPropertyListener(run, Run.FontSizeProperty);
                 RegisterPropertyListener(run, Run.FontWeightProperty);
@@ -202,6 +203,7 @@ namespace LiveCaptionsTranslator
                 return;
             foreach (var run in textBlock.Inlines.OfType<Run>())
             {
+                UnregisterPropertyListener(run, Run.TextProperty);
                 UnregisterPropertyListener(run, Run.ForegroundProperty);
                 UnregisterPropertyListener(run, Run.FontSizeProperty);
                 UnregisterPropertyListener(run, Run.FontWeightProperty);

@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -13,6 +14,7 @@ using LiveCaptionsTranslator.Utils;
 using Button = Wpf.Ui.Controls.Button;
 using Color = System.Windows.Media.Color;
 using ColorEnum = LiveCaptionsTranslator.Utils.Color;
+using TextBlock = System.Windows.Controls.TextBlock;
 
 namespace LiveCaptionsTranslator
 {
@@ -29,8 +31,12 @@ namespace LiveCaptionsTranslator
             {ColorEnum.Red, Brushes.Red},
             {ColorEnum.Black, Brushes.Black},
         };
+        private const int MaxCaptionLines = 3;
         private CaptionVisible onlyMode = CaptionVisible.Both;
         private readonly double bothCaptionsMinHeight;
+        private static TextBlock? measureBlock;
+        private bool isRefreshingCaptionText;
+        private string lastCaptionSignature = string.Empty;
 
         public CaptionVisible OnlyMode
         {
@@ -70,6 +76,9 @@ namespace LiveCaptionsTranslator
 
             ApplyFontSize();
             ApplyBackgroundOpacity();
+
+            Loaded += (s, e) => RefreshCaptionText();
+            SizeChanged += (s, e) => RefreshCaptionText();
         }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -146,7 +155,19 @@ namespace LiveCaptionsTranslator
 
         private void TranslatedChanged(object sender, PropertyChangedEventArgs e)
         {
-            ApplyFontSize();
+            // The caption raises PropertyChanged for many members (latency, history, ...) on every
+            // translator loop tick; only these properties affect the rendered caption lines.
+            switch (e.PropertyName)
+            {
+                case "OverlayOriginalCaption":
+                case "OverlayNoticePrefix":
+                case "OverlayCurrentTranslation":
+                case "OverlayPreviousTranslation":
+                case "":
+                case null:
+                    RefreshCaptionText();
+                    break;
+            }
         }
 
         private void Window_MouseEnter(object sender, MouseEventArgs e)
@@ -201,6 +222,8 @@ namespace LiveCaptionsTranslator
                     TranslatedCaption.FontWeight = FontWeights.Bold;
                     break;
             }
+
+            RefreshCaptionText();
         }
 
         private void FontStrokeIncrease_Click(object sender, RoutedEventArgs e)
@@ -316,12 +339,168 @@ namespace LiveCaptionsTranslator
             }
         }
 
+        /// <summary>
+        /// Caps each caption card to <see cref="MaxCaptionLines"/> lines. When the text grows past
+        /// the limit, the oldest lines are dropped so the newest lines stay visible (the captions
+        /// scroll upwards).
+        /// </summary>
+        private void RefreshCaptionText()
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                // Caption properties are updated from background threads; WPF elements must be
+                // touched on the UI thread.
+                Dispatcher.BeginInvoke(new Action(RefreshCaptionText), DispatcherPriority.Background);
+                return;
+            }
+
+            if (isRefreshingCaptionText || !IsLoaded)
+                return;
+
+            isRefreshingCaptionText = true;
+            try
+            {
+                var caption = Translator.Caption;
+
+                double originalWidth = GetCaptionWidth(OriginalCaption);
+                double translatedWidth = GetCaptionWidth(TranslatedCaption);
+
+                string originalText = caption.OverlayOriginalCaption ?? string.Empty;
+                string prefix = caption.OverlayNoticePrefix ?? string.Empty;
+                string previous = caption.OverlayPreviousTranslation ?? string.Empty;
+                string current = caption.OverlayCurrentTranslation ?? string.Empty;
+
+                // Caption notifications arrive on every translator loop tick, while the rendered
+                // text only changes a few times per second: skip the expensive measuring pass
+                // when nothing relevant changed.
+                string signature = string.Join('\u0001', originalText, prefix, previous, current)
+                    + '\u0001' + originalWidth.ToString("F1") + '\u0001' + translatedWidth.ToString("F1");
+                if (signature == lastCaptionSignature)
+                    return;
+                lastCaptionSignature = signature;
+
+                string original = TrimToLines(originalText, OriginalCaption, originalWidth, out _);
+                if (OriginalCaption.Text != original)
+                    OriginalCaption.Text = original;
+
+                string translated = prefix + previous + current;
+
+                TrimToLines(translated, TranslatedCaption, translatedWidth, out int cut);
+
+                int prefixEnd = prefix.Length;
+                int previousEnd = prefixEnd + previous.Length;
+                SetRunText(NoticePrefixRun, Slice(translated, cut, 0, prefixEnd));
+                SetRunText(PreviousTranslationRun, Slice(translated, cut, prefixEnd, previousEnd));
+                SetRunText(CurrentTranslationRun, Slice(translated, cut, previousEnd, translated.Length));
+
+                OriginalCaptionDecorator.InvalidateVisual();
+                TranslatedCaptionDecorator.InvalidateVisual();
+            }
+            finally
+            {
+                isRefreshingCaptionText = false;
+            }
+        }
+
+        private double GetCaptionWidth(TextBlock prototype)
+        {
+            if (prototype.ActualWidth > 0)
+                return prototype.ActualWidth;
+
+            // Before the first layout pass, or while a caption card is collapsed, the text has no
+            // width of its own: fall back to the card width (background border minus card margins
+            // and padding), then to the window width.
+            if (BorderBackground.ActualWidth > 0)
+                return BorderBackground.ActualWidth - 26;
+
+            return Math.Max(100, Width - 48);
+        }
+
+        private static string TrimToLines(string text, TextBlock prototype, double width, out int cut)
+        {
+            cut = 0;
+            if (string.IsNullOrEmpty(text) || width <= 0)
+                return text;
+
+            double lineHeight = MeasureTextHeight("M", prototype, width);
+            if (lineHeight <= 0)
+                return text;
+
+            double maxHeight = lineHeight * MaxCaptionLines + 0.5;
+            if (MeasureTextHeight(text, prototype, width) <= maxHeight)
+                return text;
+
+            // Find the smallest number of leading characters to drop so the rest fits the limit.
+            int low = 0, high = text.Length;
+            while (low < high)
+            {
+                int mid = (low + high) / 2;
+                if (MeasureTextHeight(text.Substring(mid), prototype, width) <= maxHeight)
+                    high = mid;
+                else
+                    low = mid + 1;
+            }
+
+            cut = SnapToWordBoundary(text, low);
+            return text.Substring(cut);
+        }
+
+        private static int SnapToWordBoundary(string text, int cut)
+        {
+            if (cut <= 0 || cut >= text.Length)
+                return cut;
+
+            int i = cut;
+            int limit = Math.Min(text.Length, cut + 24);
+            while (i < limit && !char.IsWhiteSpace(text[i]) && !IsCjk(text[i]))
+                i++;
+
+            if (i >= limit)
+                return cut;
+
+            while (i < text.Length && char.IsWhiteSpace(text[i]))
+                i++;
+
+            return i;
+        }
+
+        private static bool IsCjk(char c) => c >= 0x2E80;
+
+        private static double MeasureTextHeight(string text, TextBlock prototype, double width)
+        {
+            measureBlock ??= new TextBlock { TextWrapping = TextWrapping.Wrap };
+            measureBlock.FontFamily = prototype.FontFamily;
+            measureBlock.FontSize = prototype.FontSize;
+            measureBlock.FontStyle = prototype.FontStyle;
+            measureBlock.FontWeight = prototype.FontWeight;
+            measureBlock.FontStretch = prototype.FontStretch;
+            measureBlock.TextWrapping = TextWrapping.Wrap;
+            measureBlock.Text = text;
+            measureBlock.Measure(new Size(width, double.PositiveInfinity));
+            return measureBlock.DesiredSize.Height;
+        }
+
+        private static string Slice(string text, int cut, int start, int end)
+        {
+            int from = Math.Max(start, cut);
+            int to = Math.Min(end, text.Length);
+            return to > from ? text.Substring(from, to - from) : string.Empty;
+        }
+
+        private static void SetRunText(Run run, string text)
+        {
+            if (run.Text != text)
+                run.Text = text;
+        }
+
         public void ApplyFontSize()
         {
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 OriginalCaption.FontSize = Translator.Setting.OverlayWindow.FontSize;
                 TranslatedCaption.FontSize = (int)(OriginalCaption.FontSize * 1.25);
+
+                RefreshCaptionText();
             }), DispatcherPriority.Background);
         }
 
