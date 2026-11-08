@@ -201,8 +201,8 @@ namespace LiveCaptionsTranslator
                 if (LogOnlyFlag)
                 {
                     Caption.TranslatedCaption = string.Empty;
-                    Caption.DisplayTranslatedCaption = "[Paused]";
-                    Caption.OverlayNoticePrefix = "[Paused]";
+                    Caption.DisplayTranslatedCaption = "[已暂停]";
+                    Caption.OverlayNoticePrefix = "[已暂停]";
                     Caption.OverlayCurrentTranslation = string.Empty;
                 }
                 else if (!string.IsNullOrEmpty(RegexPatterns.NoticePrefix().Replace(
@@ -297,7 +297,7 @@ namespace LiveCaptionsTranslator
             }
             catch (Exception ex)
             {
-                SnackbarHost.Show("[ERROR] Logging history failed.", ex.Message, SnackbarType.Error,
+                SnackbarHost.Show("[ERROR] 历史记录写入失败。", ex.Message, SnackbarType.Error,
                     timeout: 2, closeButton: true);
             }
         }
@@ -317,7 +317,7 @@ namespace LiveCaptionsTranslator
             }
             catch (Exception ex)
             {
-                SnackbarHost.Show("[ERROR] Logging history failed.", ex.Message, SnackbarType.Error,
+                SnackbarHost.Show("[ERROR] 历史记录写入失败。", ex.Message, SnackbarType.Error,
                     timeout: 2, closeButton: true);
             }
         }

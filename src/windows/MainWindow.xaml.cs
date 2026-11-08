@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
@@ -319,7 +319,7 @@ namespace LiveCaptionsTranslator
             }
             catch (Exception ex)
             {
-                SnackbarHost.Show("[ERROR] Update Check Failed.", ex.Message, SnackbarType.Error,
+                SnackbarHost.Show("[ERROR] 检查更新失败。", ex.Message, SnackbarType.Error,
                     timeout: 2, closeButton: true);
 
                 return;
@@ -333,12 +333,12 @@ namespace LiveCaptionsTranslator
             {
                 var dialog = new Wpf.Ui.Controls.MessageBox
                 {
-                    Title = "New Version Available",
-                    Content = $"A new version has been detected: {latestVersion}\n" +
-                              $"Current version: {currentVersion}\n" +
-                              $"Please visit GitHub to download the latest release.",
-                    PrimaryButtonText = "Update",
-                    CloseButtonText = "Ignore this version"
+                    Title = "发现新版本",
+                    Content = $"检测到新版本：{latestVersion}\n" +
+                              $"当前版本：{currentVersion}\n" +
+                              $"请前往 GitHub 下载最新版本。",
+                    PrimaryButtonText = "更新",
+                    CloseButtonText = "忽略此版本"
                 };
                 var result = await dialog.ShowDialogAsync();
 
@@ -355,7 +355,7 @@ namespace LiveCaptionsTranslator
                     }
                     catch (Exception ex)
                     {
-                        SnackbarHost.Show("[ERROR] Open Browser Failed.", ex.Message, SnackbarType.Error,
+                        SnackbarHost.Show("[ERROR] 打开浏览器失败。", ex.Message, SnackbarType.Error,
                             timeout: 2, closeButton: true);
                     }
                 }
