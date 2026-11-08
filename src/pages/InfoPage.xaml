@@ -64,7 +64,9 @@
             </TextBlock>
             <TextBlock>
                 <Run FontWeight="SemiBold" Text="当前版本：" />
-                <Run x:Name="Version" Text="1.1.1.1" />
+                <Hyperlink NavigateUri="https://github.com/Courtoisrl/LiveCaptions-Translator/releases" RequestNavigate="Hyperlink_RequestNavigate">
+                    <Run x:Name="Version" Text="1.7.2" />
+                </Hyperlink>
             </TextBlock>
         </StackPanel>
     </Grid>

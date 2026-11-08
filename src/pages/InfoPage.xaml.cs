@@ -14,8 +14,14 @@ namespace LiveCaptionsTranslator
         {
             InitializeComponent();
             ApplicationThemeManager.ApplySystemTheme();
-            var version = Assembly.GetExecutingAssembly().GetName().Version?.ToString();
-            Version.Text = version;
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            Version.Text = version == null
+                ? "1.7.2"
+                : version.Revision > 0
+                    ? version.ToString()
+                    : version.Build > 0
+                        ? version.ToString(3)
+                        : version.ToString(2);
 
             Loaded += (s, e) =>
             {
