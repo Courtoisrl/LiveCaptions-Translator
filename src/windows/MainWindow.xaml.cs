@@ -100,8 +100,11 @@ namespace LiveCaptionsTranslator
 
             var overlay = new OverlayWindow();
 
-            // Only the original caption is shown by default; the overlay button cycles the rest.
-            overlay.OnlyMode = CaptionVisible.SubtitleOnly;
+            // Restore the layout the user left the overlay in; the first launch shows the
+            // original caption only (the overlay button cycles through the other modes).
+            var layout = Translator.Setting.OverlayWindow;
+            overlay.SwitchMode = layout.SwitchMode;
+            overlay.OnlyMode = layout.OnlyMode;
 
             overlay.SizeChanged +=
                 (s, e) => WindowHandler.SaveState(overlay, Translator.Setting);

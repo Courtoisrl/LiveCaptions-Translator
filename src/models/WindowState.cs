@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using LiveCaptionsTranslator.Utils;
 
@@ -78,6 +78,8 @@ namespace LiveCaptionsTranslator.models
 
         private Color backgroundColor = Color.Black;
         private int opacity = 150;
+        private CaptionVisible onlyMode = CaptionVisible.SubtitleOnly;
+        private CaptionLocation switchMode = CaptionLocation.TranslationTop;
 
         public int FontSize
         {
@@ -131,6 +133,28 @@ namespace LiveCaptionsTranslator.models
             {
                 opacity = value;
                 OnPropertyChanged("Opacity");
+            }
+        }
+        public CaptionVisible OnlyMode
+        {
+            get => onlyMode;
+            set
+            {
+                if (onlyMode == value)
+                    return;
+                onlyMode = value;
+                OnPropertyChanged("OnlyMode");
+            }
+        }
+        public CaptionLocation SwitchMode
+        {
+            get => switchMode;
+            set
+            {
+                if (switchMode == value)
+                    return;
+                switchMode = value;
+                OnPropertyChanged("SwitchMode");
             }
         }
 

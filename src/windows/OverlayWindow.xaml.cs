@@ -47,9 +47,40 @@ namespace LiveCaptionsTranslator
                     return;
                 onlyMode = value;
                 ResizeForOnlyMode();
+                PersistLayout();
             }
         }
-        public CaptionLocation SwitchMode { get; set; } = CaptionLocation.TranslationTop;
+
+        private CaptionLocation switchMode = CaptionLocation.TranslationTop;
+        public CaptionLocation SwitchMode
+        {
+            get => switchMode;
+            set
+            {
+                if (switchMode == value)
+                    return;
+                switchMode = value;
+                ApplySwitchMode();
+                PersistLayout();
+            }
+        }
+
+        private void ApplySwitchMode()
+        {
+            Grid.SetRow(TranslatedCaptionCard, switchMode == CaptionLocation.TranslationTop ? 0 : 1);
+            Grid.SetRow(OriginalCaptionCard, switchMode == CaptionLocation.TranslationTop ? 1 : 0);
+        }
+
+        private void PersistLayout()
+        {
+            var state = Translator.Setting.OverlayWindow;
+            if (state.OnlyMode == onlyMode && state.SwitchMode == switchMode)
+                return;
+
+            state.OnlyMode = onlyMode;
+            state.SwitchMode = switchMode;
+            Translator.Setting.Save();
+        }
 
         public OverlayWindow()
         {
@@ -293,18 +324,9 @@ namespace LiveCaptionsTranslator
 
         private void SwitchModeButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SwitchMode == CaptionLocation.TranslationTop)
-            {
-                Grid.SetRow(TranslatedCaptionCard, 1);
-                Grid.SetRow(OriginalCaptionCard, 0);
-                SwitchMode = CaptionLocation.SubtitleTop;
-            }
-            else
-            {
-                Grid.SetRow(TranslatedCaptionCard, 0);
-                Grid.SetRow(OriginalCaptionCard, 1);
-                SwitchMode = CaptionLocation.TranslationTop;
-            }
+            SwitchMode = SwitchMode == CaptionLocation.TranslationTop
+                ? CaptionLocation.SubtitleTop
+                : CaptionLocation.TranslationTop;
         }
 
         private void ClickThrough_Click(object sender, RoutedEventArgs e)
