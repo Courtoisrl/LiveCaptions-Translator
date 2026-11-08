@@ -26,7 +26,9 @@ namespace LiveCaptionsTranslator
         public static Caption? Caption => caption;
         public static Setting? Setting => setting;
 
-        public static bool LogOnlyFlag { get; set; } = false;
+        // Translation is turned off (paused, log-only) by default: the flag is reset on every
+        // launch instead of being persisted, so the user opts in to translating each session.
+        public static bool LogOnlyFlag { get; set; } = true;
         public static bool FirstUseFlag { get; set; } = false;
 
         public static event Action? TranslationLogged;

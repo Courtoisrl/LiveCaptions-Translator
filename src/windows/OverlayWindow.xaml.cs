@@ -30,12 +30,15 @@ namespace LiveCaptionsTranslator
             {ColorEnum.Black, Brushes.Black},
         };
         private CaptionVisible onlyMode = CaptionVisible.Both;
+        private readonly double bothCaptionsMinHeight;
 
         public CaptionVisible OnlyMode
         {
             get => onlyMode;
             set
             {
+                if (onlyMode == value)
+                    return;
                 onlyMode = value;
                 ResizeForOnlyMode();
             }
@@ -45,6 +48,7 @@ namespace LiveCaptionsTranslator
         public OverlayWindow()
         {
             InitializeComponent();
+            bothCaptionsMinHeight = MinHeight;
             DataContext = Translator.Caption;
 
             Loaded += (s, e) => Translator.Caption.PropertyChanged += TranslatedChanged;
@@ -256,27 +260,12 @@ namespace LiveCaptionsTranslator
 
         private void OnlyModeButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            var symbolIcon = button?.Icon as SymbolIcon;
-
-            if (onlyMode == CaptionVisible.SubtitleOnly)
+            OnlyMode = onlyMode switch
             {
-                // (0) Subtitle + Translation
-                symbolIcon.Symbol = SymbolRegular.PanelBottom20;
-                OnlyMode = CaptionVisible.Both;
-            }
-            else if (onlyMode == CaptionVisible.Both)
-            {
-                // (1) Translation Only
-                symbolIcon.Symbol = SymbolRegular.PanelTopExpand20;
-                OnlyMode = CaptionVisible.TranslationOnly;
-            }
-            else
-            {
-                // (2) Subtitle Only
-                symbolIcon.Symbol = SymbolRegular.PanelTopContract20;
-                OnlyMode = CaptionVisible.SubtitleOnly;
-            }
+                CaptionVisible.SubtitleOnly => CaptionVisible.Both,
+                CaptionVisible.Both => CaptionVisible.TranslationOnly,
+                _ => CaptionVisible.SubtitleOnly
+            };
         }
 
         private void SwitchModeButton_Click(object sender, RoutedEventArgs e)
@@ -305,33 +294,25 @@ namespace LiveCaptionsTranslator
 
         public void ResizeForOnlyMode()
         {
-            if (onlyMode == CaptionVisible.TranslationOnly)
-            {
-                // (1) Translation Only
-                OriginalCaptionCard.Visibility = Visibility.Collapsed;
-                this.MinHeight -= StyleConsts.DELTA_OVERLAY_HEIGHT;
-                this.Height -= StyleConsts.DELTA_OVERLAY_HEIGHT;
-                this.Top += StyleConsts.DELTA_OVERLAY_HEIGHT;
-            }
-            if (onlyMode == CaptionVisible.SubtitleOnly)
-            {
-                // restore
-                OriginalCaptionCard.Visibility = Visibility.Visible;
-                this.Top -= StyleConsts.DELTA_OVERLAY_HEIGHT;
-                this.Height += StyleConsts.DELTA_OVERLAY_HEIGHT;
-                this.MinHeight += StyleConsts.DELTA_OVERLAY_HEIGHT;
+            bool showTranslated = onlyMode != CaptionVisible.SubtitleOnly;
+            bool showOriginal = onlyMode != CaptionVisible.TranslationOnly;
 
-                // (2) Subtitle Only
-                TranslatedCaptionCard.Visibility = Visibility.Collapsed;
-                this.MinHeight -= StyleConsts.DELTA_OVERLAY_HEIGHT;
-                this.Height -= StyleConsts.DELTA_OVERLAY_HEIGHT;
-            }
-            else if (onlyMode == CaptionVisible.Both)
+            TranslatedCaptionCard.Visibility = showTranslated ? Visibility.Visible : Visibility.Collapsed;
+            OriginalCaptionCard.Visibility = showOriginal ? Visibility.Visible : Visibility.Collapsed;
+
+            // The window is sized by its content (SizeToContent="Height"), so only the minimum height
+            // has to follow the number of visible captions.
+            int visibleCaptions = (showTranslated ? 1 : 0) + (showOriginal ? 1 : 0);
+            MinHeight = bothCaptionsMinHeight - (2 - visibleCaptions) * StyleConsts.DELTA_OVERLAY_HEIGHT;
+
+            if (OnlyModeButton.Icon is SymbolIcon onlyModeIcon)
             {
-                // restore
-                TranslatedCaptionCard.Visibility = Visibility.Visible;
-                this.Height += StyleConsts.DELTA_OVERLAY_HEIGHT;
-                this.MinHeight += StyleConsts.DELTA_OVERLAY_HEIGHT;
+                onlyModeIcon.Symbol = onlyMode switch
+                {
+                    CaptionVisible.SubtitleOnly => SymbolRegular.PanelTopContract20,
+                    CaptionVisible.TranslationOnly => SymbolRegular.PanelTopExpand20,
+                    _ => SymbolRegular.PanelBottom20
+                };
             }
         }
 

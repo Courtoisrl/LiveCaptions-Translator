@@ -155,6 +155,16 @@ namespace LiveCaptionsTranslator
             ContextAwareInfoFlyout.Hide();
         }
 
+        private void StartMinimizedInfo_MouseEnter(object sender, MouseEventArgs e)
+        {
+            StartMinimizedInfoFlyout.Show();
+        }
+
+        private void StartMinimizedInfo_MouseLeave(object sender, MouseEventArgs e)
+        {
+            StartMinimizedInfoFlyout.Hide();
+        }
+
         private void CheckForFirstUse()
         {
             if (Translator.FirstUseFlag)

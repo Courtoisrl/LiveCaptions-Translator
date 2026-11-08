@@ -292,6 +292,37 @@
                     </ui:Flyout>
                 </StackPanel>
             </StackPanel>
+
+            <StackPanel Margin="15,10,0,0" Orientation="Vertical">
+                <TextBlock Margin="2.5,0,0,5" Text="Start Minimized" />
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                    <ui:ToggleSwitch
+                        Width="90"
+                        Height="30"
+                        Padding="10,4,10,7"
+                        IsChecked="{Binding StartMinimized, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        OffContent="Off"
+                        OnContent="On" />
+                    <Button
+                        x:Name="StartMinimizedInfo"
+                        Width="15"
+                        Height="15"
+                        Margin="-5,-3,0,0"
+                        Padding="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        MouseEnter="StartMinimizedInfo_MouseEnter"
+                        MouseLeave="StartMinimizedInfo_MouseLeave">
+                        <ui:SymbolIcon Symbol="Info16" />
+                    </Button>
+                    <ui:Flyout x:Name="StartMinimizedInfoFlyout">
+                        <TextBlock Width="300" TextWrapping="Wrap">
+                            <Run Text="Start the main window minimized to the notification area." />
+                            <Run Text="&#x0A;Click the tray icon to show it again." />
+                        </TextBlock>
+                    </ui:Flyout>
+                </StackPanel>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>

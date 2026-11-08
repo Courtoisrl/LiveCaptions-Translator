@@ -20,6 +20,8 @@ namespace LiveCaptionsTranslator.models
         private int numContexts = 2;
         private int displaySentences = 1;
         private bool contextAware = false;
+        private bool startMinimized = false;
+        private bool overlayWindowEnabled = false;
 
         private string apiName;
         private string targetLanguage;
@@ -68,6 +70,28 @@ namespace LiveCaptionsTranslator.models
             {
                 contextAware = value;
                 OnPropertyChanged("ContextAware");
+            }
+        }
+        public bool StartMinimized
+        {
+            get => startMinimized;
+            set
+            {
+                if (startMinimized == value)
+                    return;
+                startMinimized = value;
+                OnPropertyChanged("StartMinimized");
+            }
+        }
+        public bool OverlayWindowEnabled
+        {
+            get => overlayWindowEnabled;
+            set
+            {
+                if (overlayWindowEnabled == value)
+                    return;
+                overlayWindowEnabled = value;
+                OnPropertyChanged("OverlayWindowEnabled");
             }
         }
 
